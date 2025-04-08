@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tiro ao Alvo</title>
+  <link rel="stylesheet" href="styleMine.css">
+  <link rel="icon"
+    href="https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Bow_%28Pull_2%29_JE1_BE1.png/revision/latest/scale-to-width-down/150?cb=20200510234425">
+  <script src="jquery-3.7.1.min.js"></script>
+  <link rel="" href="death-endermen.mp3">
+  </link>
+  <style>
+    /* Estilos para a área do campo */
+    #cenario {
+      position: relative;
+      width: 800px;
+      height: 300px;
+      border: 2px solid black;
+      overflow: hidden;
+      background-image: url("65b33d5a4a3c55e1a9c751180d59c49f.jpg");
+    }
+
+    /* Estilos para a imagem */
+    #imagem {
+      position: absolute;
+      width: 150px;
+      height: 240px;
+      background-image: url("Endermanpng (1).jpeg");
+      background-size: cover;
+      border-radius: 50%;
+      cursor: crosshair;
+    }
+
+    /* Estilos para os resultados */
+    .container {
+      margin-top: 10px;
+      font-size: 18px;
+      background-color: aliceblue;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Tiro ao Alvo</h1>
+
+  <div id="cenario">
+    <div id="imagem"></div>
+  </div>
+
+  <div class="container">
+    Tentativas: <span id="tentativas">0</span> |
+    Acertos: <span id="acertos">0</span> |
+    Erros: <span id="erros">0</span>
+  </div>
+
+  <dialog id="popup">
+    <form action="conexao.php" method="post">
+      <input type="text" name="nome" id="n">
+      <input type="number" name="acertos" id="a" hidden>
+      <input type="number" name="erros" id="e" hidden>
+      <input type="submit" value="salvar">
+    </form>
+  </dialog>
+
+  <script>
+    window.onload = function () {
+      setTimeout(function () {
+        document.getElementById("popup").show();
+        document.getElementById("a").value=acertos;
+        document.getElementById("e").value=erros;
+      }, tempoDeJogo*1000)
+    };
+    var tempoDeJogo = 10; // Tempo de jogo em segundos
+    var contadorTempo;
+
+    // Variáveis para os resultados
+    var tentativas = 0;
+    var acertos = 0;
+    var erros = 0;
+
+    // Função para mover a imagem aleatoriamente dentro do campo
+    function moverImagemAleatoriamente() {
+      var campo = document.getElementById('cenario');
+      var imagem = document.getElementById('imagem');
+
+      // Obtem as dimensões do campo
+      var campoWidth = campo.clientWidth;
+      var campoHeight = campo.clientHeight;
+
+      // Obtem as dimensões da imagem
+      var imagemWidth = imagem.clientWidth;
+      var imagemHeight = imagem.clientHeight;
+
+      // Gera uma posição aleatória dentro do campo
+      var x = Math.random() * (campoWidth - imagemWidth);
+      var y = Math.random() * (campoHeight - imagemHeight);
+
+      // Define a nova posição da imagem
+      imagem.style.left = x + 'px';
+      imagem.style.top = y + 'px';
+    }
+
+    // Configura o contador de tempo
+    contadorTempo = setInterval(function () {
+      tempoDeJogo--;
+      if (tempoDeJogo <= 0) {
+        clearInterval(contadorTempo); // Para o contador de tempo
+        exibirPopupNome();
+      }
+    }, 1000); // Atualiza a cada segundo
+
+    function exibirPopupNome() {
+  setTimeout(function() {
+    var nome = prompt("Digite seu nome:");
+    if (nome !== null && nome !== "") {
+      // Salva os resultados no banco de dados
+      salvarResultados(nome, acertos, erros);
+      // Atualiza o ranque
+      atualizarRanque();
+      window.location.href = "ranque.php";
+    } else {
+      alert("Nome inválido. Tente novamente.");
+      exibirPopupNome();
+    }
+  }, 100); // Aguarde 100 milissegundos
+}
+
+
+    function salvarResultados(nome, acertos, erros) {
+      var xhr = new XMLHttpRequest();
+      var url = "salvar_resultados.php"; // O arquivo PHP no servidor
+
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      // Dados que serão enviados
+      var data = "nome=" + nome + "&acertos=" + acertos + "&erros=" + erros;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // A resposta da API 
+          console.log(xhr.responseText);
+        }
+      };
+
+      xhr.send(data);
+    }
+
+    // Chama a função para mover a imagem aleatoriamente quando a página carregar
+    window.onload = moverImagemAleatoriamente;
+
+    // Função para atualizar os resultados
+    function atualizarResultados() {
+      document.getElementById('tentativas').innerText = tentativas;
+      document.getElementById('acertos').innerText = acertos;
+      document.getElementById('erros').innerText = erros;
+    }
+
+    // Função para reproduzir o som de acerto
+    function reproduzirSomAcerto() {
+      var audio = new Audio('death-endermen.mp3'); // Som de acerto
+      audio.play();
+    }
+
+    //Evento de clique no documento para verificar acertos e erros
+    document.addEventListener('click', function (event) {
+      // Verifica se o clique foi na imagem
+      if (event.target.id === 'imagem') {
+        acertos++;
+        // Chama função para reproduzir o som de acerto
+        reproduzirSomAcerto();
+      } else {
+        erros++;
+      }
+
+      tentativas++;
+
+      // Atualiza os resultados e move novamente a imagem
+      atualizarResultados();
+      moverImagemAleatoriamente();
+    });
+  </script>
+
+  <footer>
+    <div class="parágrafos">
+      <div class="prgrf1">
+
+        <p><b>Atividade</b></p>
+        <div class="footercontent1">
+          <p>Disciplina: Programação para Internet</p>
+          <p>Professor: Marcelo Figueiredo</p>
+          <p>IFRN - Campus Santa Cruz/RN</p>
+        </div>
+
+      </div>
+      <div class="prgrf2">
+
+        <p><b>Desenvolvido por</b></p>
+        <div class="footercontent2">
+          <p>Eived Yan Sousa de Lima</p>
+          <p>Raian Guilherme Barbosa</p>
+          <p>Maria Fernanda da Silva</p>
+        </div>
+
+      </div>
+      <p class="direitos">Todos os direitos reservados<img class="C" src="Copyright.png" width="20px"></p>
+  </footer>
+</body>
+
+</html>
