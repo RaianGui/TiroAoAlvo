@@ -1,6 +1,6 @@
 body {
     font-family: mine;
-    background: url("https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Dirt_background_JE2.png/revision/latest?cb=20210507124914");
+    background: url("dirtyminecratf.jpg");
     width: 50vw;
     height: 90vh;
     margin: 200px;
@@ -55,7 +55,10 @@ h1 {
 
 
 .cenário {
-    position: absolute; left: 281px; right: 190px; top: 15pc;
+    position: absolute;
+    left: 281px;
+    right: 190px;
+    top: 15pc;
     cursor: crosshair;
 }
 
@@ -65,7 +68,8 @@ footer {
     padding-top: 95px;
     margin-top: 200px;
     height: 230px;
-    width: 1349px; left: -30px;
+    width: 1349px;
+    left: -30px;
 }
 
 .parágrafos {
@@ -75,7 +79,9 @@ footer {
 }
 
 .prgrf1 {
-    position: relative; right: 400px; padding-bottom: 100px;
+    position: relative;
+    right: 400px;
+    padding-bottom: 100px;
     z-index: 1;
 }
 
@@ -83,15 +89,17 @@ footer {
     text-size-adjust: 3px;
 }
 
-.prgrf2{
-    position: absolute; left: 1000px; margin-top: -315.5px;
+.prgrf2 {
+    position: absolute;
+    left: 1000px;
+    margin-top: -315.5px;
 }
 
 .footercontent2 {
     text-size-adjust: 3px;
 }
 
-.direitos{
+.direitos {
     margin-top: -100px;
     z-index: 1;
 }
@@ -101,4 +109,31 @@ footer {
     margin-left: 3px;
     top: -5px;
     z-index: 1px;
+}
+
+#cenario {
+    position: relative;
+    width: 800px;
+    height: 300px;
+    border: 2px solid black;
+    overflow: hidden;
+    background-image: url("65b33d5a4a3c55e1a9c751180d59c49f.jpg");
+}
+
+
+#imagem {
+    position: absolute;
+    width: 150px;
+    height: 240px;
+    background-image: url("Endermanpng (1).jpeg");
+    background-size: cover;
+    border-radius: 50%;
+    cursor: crosshair;
+}
+
+
+.container {
+    margin-top: 10px;
+    font-size: 18px;
+    background-color: aliceblue;
 }
